@@ -1,33 +1,33 @@
 # SBLTR
 
-Firmware robot self-balancing ESP32, dipindahkan dari sketch Arduino `.ino` ke proyek PlatformIO.
+Self-balancing robot firmware for ESP32
 
-## Struktur kode
+## Code Structure
 
-| Berkas | Tanggung jawab |
+| File | Responsibility |
 | --- | --- |
-| `src/main.cpp` | Memulai modul dan menjalankan loop utama. |
-| `src/RobotController.cpp` | State machine, PID balancing, dan penanganan robot jatuh. |
-| `src/Imu.cpp` | MPU6050, kalibrasi, sudut roll, dan complementary filter. |
-| `src/Motors.cpp` | Arah motor, PWM, slew limit, dan konversi keluaran PID. |
-| `src/LineFollower.cpp` | Pembacaan lima sensor garis dan koreksi belok. |
-| `src/WebControl.cpp` | Wi-Fi, halaman kontrol, dan endpoint `/set` serta `/drive`. |
-| `src/SerialTuning.cpp` | Perintah tuning melalui Serial. |
-| `include/HardwareConfig.h` | Pin dan konstanta perangkat keras. |
-| `include/RobotContext.h` | Parameter dan status yang dipakai bersama. |
+| `src/main.cpp` | Initializes the modules and runs the main loop. |
+| `src/RobotController.cpp` | State machine, PID balancing, and fall handling. |
+| `src/Imu.cpp` | MPU6050, calibration, roll angle, and complementary filter. |
+| `src/Motors.cpp` | Motor direction, PWM, slew limiting, and PID output conversion. |
+| `src/LineFollower.cpp` | Reading the five line sensors and steering correction. |
+| `src/WebControl.cpp` | Wi-Fi, control page, and the `/set` and `/drive` endpoints. |
+| `src/SerialTuning.cpp` | Tuning commands over Serial. |
+| `include/HardwareConfig.h` | Pin assignments and hardware constants. |
+| `include/RobotContext.h` | Shared parameters and state. |
 
-Header untuk setiap modul berada di `include/`. Nilai awal pin, PID, sensor garis, dan logika kontrol mengikuti sketch asal. Modul motor memakai API PWM yang sesuai untuk Arduino ESP32 2.x atau 3.x.
+The header for each module is located in `include/`. The initial values for pins, PID, line sensors, and control logic follow the original sketch. The motor module uses the appropriate PWM API for Arduino ESP32 core 2.x or 3.x.
 
-## Menjalankan
+## Getting Started
 
-1. Pastikan `include/WifiCredentials.h` tersedia. Jika belum, salin `include/WifiCredentials.example.h` ke nama tersebut dan isi SSID serta kata sandi. Berkas kredensial lokal dikecualikan oleh `.gitignore`.
-2. Jalankan `pio run -e esp32dev` untuk build.
-3. Jalankan `pio run -e esp32dev -t upload` untuk unggah ke ESP32. Buka monitor Serial pada 115200 baud.
+1. Make sure `include/WifiCredentials.h` exists. If it does not, copy `include/WifiCredentials.example.h` to that name and fill in your SSID and password. The local credentials file is excluded by `.gitignore`.
+2. Run `pio run -e esp32dev` to build.
+3. Run `pio run -e esp32dev -t upload` to flash the ESP32. Open the Serial monitor at 115200 baud.
 
-Setelah terhubung ke Wi-Fi, alamat IP robot dicetak pada Serial. Buka alamat tersebut untuk mengubah PID dan memberi perintah arah.
+Once connected to Wi-Fi, the robot's IP address is printed to Serial. Open that address in a browser to adjust the PID values and send direction commands.
 
-## Catatan dari sketch asal
+## Notes from the Original Sketch
 
-- Sensor garis aktif secara bawaan dan dapat mengubah setpoint pada setiap siklus balancing. Karena itu, perintah maju/mundur dari web dapat tertimpa pada siklus berikutnya.
-- `MPU6050_light::update()` tidak menyediakan status kegagalan pembacaan; pemeriksaan `readImu()` masih mengikuti perilaku sketch asal. Keberadaan MPU diperiksa saat inisialisasi.
-- Koneksi Wi-Fi pada `setup()` menunggu hingga berhasil sebelum kontrol robot mulai berjalan.
+- The line sensor is enabled by default and can change the setpoint on every balancing cycle. As a result, forward/backward commands from the web interface may be overwritten on the next cycle.
+- `MPU6050_light::update()` does not provide a read-failure status; the `readImu()` check still follows the original sketch's behavior. MPU presence is verified during initialization.
+- The Wi-Fi connection in `setup()` blocks until it succeeds before robot control starts.
