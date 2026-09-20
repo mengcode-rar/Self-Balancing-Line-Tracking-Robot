@@ -1,5 +1,6 @@
 # SBLTR
 
+<<<<<<< HEAD
 Self-balancing robot firmware for ESP32
 
 ## Code Structure
