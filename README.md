@@ -2,6 +2,9 @@
 
 <<<<<<< HEAD
 Self-balancing robot firmware for ESP32
+=======
+Firmware robot self-balancing ESP32
+>>>>>>> 8f3cfc1e58407acc166720e2f240ac09491b7e51
 
 ## Code Structure
 
