@@ -1,6 +1,6 @@
 # SBLTR
 
-Firmware robot self-balancing ESP32, dipindahkan dari sketch Arduino `.ino` ke proyek PlatformIO.
+Firmware robot self-balancing ESP32
 
 ## Struktur kode
 
